@@ -1,0 +1,71 @@
+import com.sun.tools.corba.se.idl.Compile
+
+// 定义一堆基础插件
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: "jacoco"
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+// 定义项目属性
+group = 'com.data3.mg'
+version = '1.0.0'
+description = """MG common library"""
+
+// 定义依赖仓库
+repositories {
+    mavenCentral()
+}
+// project的额外属性，这里用于定义profile属性，模拟maven的profile
+ext {
+    if (project.hasProperty('profile')) {
+        profile = project['profile']
+    } else {
+        profile = "dev"
+    }
+    println "profile:" + profile
+}
+// 额外增加source path
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main/profiles/${profile}"
+        }
+    }
+}
+// project依赖
+dependencies {
+}
+// task配置
+checkstyle {
+    ignoreFailures = true
+    sourceSets = [sourceSets.main]
+}
+findbugs {
+    ignoreFailures = true
+    sourceSets = [sourceSets.main]
+}
+pmd {
+    ruleSets = ["basic", "braces", "design"]
+    ignoreFailures = true
+    sourceSets = [sourceSets.main]
+}
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+    sourceSets sourceSets.main
+}
+test {
+    useTestNG()
+    jacoco {
+        excludes = ["org.*"]
+    }
+}
+tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+}
