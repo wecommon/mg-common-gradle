@@ -12,12 +12,11 @@ DerivedData/
 *.ipr
 *.iws
 .idea
+.gradle
 target
 tmp
 *.log
 out
-.gradle
-gradle
 bin
 *.class
 
