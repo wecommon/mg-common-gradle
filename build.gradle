@@ -22,7 +22,7 @@ ext {
     if (project.hasProperty('profile')) {
         profile = project['profile']
     } else {
-        profile = "dev"
+        profile = "development"
     }
     println "profile:" + profile
 }
